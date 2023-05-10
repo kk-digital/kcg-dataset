@@ -96,6 +96,12 @@ def clip_json_generator(input_directory, output_directory, batch_size):
         unzip_start_time = time.time()
 
         zip_file_path = os.path.join(input_directory, file)
+        output_json_file = os.path.join(output_directory, f"{os.path.splitext(os.path.basename(file))[0]}.json")
+        
+        if os.path.isfile(output_json_file):
+            print(f"JSON file '{output_json_file}' already exists. Skipping this zip file.")
+            continue
+
 
         if i > 0:
             # Wait for the previous zip file to be loaded into memory
