@@ -91,6 +91,7 @@ def clip_json_generator(input_directory, output_directory, batch_size):
 
     threads = {}
     file_data_dict = {}
+    previous_zip_file_path = os.path.join(input_directory, zip_files[0])
     for i, file in enumerate(tqdm(zip_files, desc="Processing zip files")):
         unzip_start_time = time.time()
 
