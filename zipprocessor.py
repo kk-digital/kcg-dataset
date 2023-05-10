@@ -16,21 +16,23 @@ def process_zip_files(input_directory, output_directory):
 
     for zip_file_path in tqdm(zip_files, desc="Processing zip files"):
         start_time = time.time()
-        file_data = {}
+        file_data = []
         try:
             with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
                 for file_info in zip_ref.infolist():
                     with zip_ref.open(file_info) as file:
-                        file_data[file_info.filename] = {
-                            'file_path': os.path.dirname(file_info.filename),
+                        file_data.append({
+                            'file_path': os.path.join(os.path.dirname(zip_file_path), file_info.filename),
                             'file_name': os.path.basename(file_info.filename),
-                            'file_hash': hashlib.sha256(file.read()).hexdigest()
-                        }
+                            'sha256': hashlib.sha256(file.read()).hexdigest()
+                        })
             process_time = time.time() - start_time
             zip_file_size = os.path.getsize(zip_file_path) / (1024 * 1024)  # size in MB
             speed = zip_file_size / process_time  # speed in MB/s
+      
 
-            print(f"Processed zip file '{zip_file_path}' in {process_time:.2f} seconds ({speed:.2f} MB/s).")
+
+            print(f"Processed zip file '{zip_file_path}' ({zip_file_size:.2f} MB) in {process_time:.2f} seconds ({speed:.2f} MB/s).")
 
             # save output to a JSON file
             output_file_path = os.path.join(output_directory, f"{os.path.splitext(os.path.basename(zip_file_path))[0]}.json")
