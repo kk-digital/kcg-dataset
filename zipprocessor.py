@@ -14,7 +14,7 @@ def process_zip_files(input_directory, output_directory):
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
-    for zip_file_path in tqdm(zip_files, desc="Processing zip files"):
+    for i, zip_file_path in enumerate(tqdm(zip_files, desc="Processing zip files")):
         start_time = time.time()
         file_data = []
         try:
@@ -29,8 +29,6 @@ def process_zip_files(input_directory, output_directory):
             process_time = time.time() - start_time
             zip_file_size = os.path.getsize(zip_file_path) / (1024 * 1024)  # size in MB
             speed = zip_file_size / process_time  # speed in MB/s
-      
-
 
             print(f"Processed zip file '{zip_file_path}' ({zip_file_size:.2f} MB) in {process_time:.2f} seconds ({speed:.2f} MB/s).")
 
@@ -41,6 +39,13 @@ def process_zip_files(input_directory, output_directory):
 
         except Exception as e:
             print(f"Error processing zip file '{zip_file_path}': {e}")
+
+        # Print the progress for the current zip file being processed
+        if i == 0:
+            progress = f"1/{total_zip_files}"
+        else:
+            progress = f"{i+1}/{total_zip_files}"
+        print(f"\nProcessed {progress} zip files.\n")
 
     print("Processing finished.")
 
