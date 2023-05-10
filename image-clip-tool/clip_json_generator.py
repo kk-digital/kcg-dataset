@@ -102,7 +102,7 @@ def clip_json_generator(input_directory, output_directory, batch_size):
             print(f"JSON file '{output_json_file}' already exists. Skipping this zip file.")
             continue
 
-
+    if previous_zip_file_path is not None:
         if i > 0:
             # Wait for the previous zip file to be loaded into memory
             threads[previous_zip_file_path].join()
