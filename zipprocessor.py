@@ -14,7 +14,7 @@ def process_zip_files(input_directory, output_directory):
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
-    for i, zip_file_path in enumerate(tqdm(zip_files, desc="Processing zip files")):
+    for i, zip_file_path in enumerate(tqdm(zip_files), 1):
         start_time = time.time()
         file_data = []
         try:
@@ -30,7 +30,7 @@ def process_zip_files(input_directory, output_directory):
             zip_file_size = os.path.getsize(zip_file_path) / (1024 * 1024)  # size in MB
             speed = zip_file_size / process_time  # speed in MB/s
 
-            print(f"Processed zip file '{zip_file_path}' ({zip_file_size:.2f} MB) in {process_time:.2f} seconds ({speed:.2f} MB/s).")
+            print(f"\nProcessed zip file '{zip_file_path}' ({zip_file_size:.2f} MB) in {process_time:.2f} seconds ({speed:.2f} MB/s).")
 
             # save output to a JSON file
             output_file_path = os.path.join(output_directory, f"{os.path.splitext(os.path.basename(zip_file_path))[0]}.json")
@@ -38,16 +38,13 @@ def process_zip_files(input_directory, output_directory):
                 json.dump(file_data, f, indent=4)
 
         except Exception as e:
-            print(f"Error processing zip file '{zip_file_path}': {e}")
+            print(f"\nError processing zip file '{zip_file_path}': {e}")
 
         # Print the progress for the current zip file being processed
-        if i == 0:
-            progress = f"1/{total_zip_files}"
-        else:
-            progress = f"{i+1}/{total_zip_files}"
+        progress = f"{i}/{total_zip_files}"
         print(f"\nProcessed {progress} zip files.\n")
 
-    print("Processing finished.")
+    print("\nProcessing finished.")
 
 parser = argparse.ArgumentParser(description='Process zip files in a directory.')
 parser.add_argument('input_directory', type=str, help='Path to directory containing zip files')
