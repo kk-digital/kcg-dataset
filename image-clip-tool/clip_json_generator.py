@@ -94,13 +94,15 @@ def clip_json_generator(input_directory, output_directory, batch_size):
         file_data = open_zip_to_ram(zip_file_path)
         unzip_end_time = time.time()
         unzip_time = unzip_end_time - unzip_start_time
-
-
-
         
 
             # calculate zip file size in MB
         zip_file_size = os.path.getsize(zip_file_path) / (1024 * 1024)
+        output_json_file = os.path.join(output_directory, f"{os.path.splitext(os.path.basename(file))[0]}.json")
+
+        if os.path.exists(output_json_file):
+            print(f"JSON file already exists for {file}. Skipping processing...")
+            continue
 
         image_data = []
         total_images = len(file_data)
